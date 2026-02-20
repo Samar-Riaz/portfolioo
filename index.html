@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Stack Developer — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05050a;--surf:#0c0c14;--surf2:#111120;
+  --acc:#c8ff00;--acc2:#ff4d6d;--acc3:#00d4ff;
+  --txt:#efefef;--muted:#5a5a72;--border:rgba(255,255,255,0.055);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
+
+#cur,#cur-ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%)}
+#cur{width:9px;height:9px;background:var(--acc)}
+#cur-ring{width:34px;height:34px;border:1.5px solid rgba(200,255,0,.55);z-index:9998;transition:width .13s,height .13s,border-color .13s}
+body.hov #cur-ring{width:54px;height:54px;border-color:rgba(200,255,0,.9)}
+body.hov #cur{transform:translate(-50%,-50%) scale(1.6)}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.22;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 40px;display:flex;align-items:center;justify-content:center;gap:40px;background:linear-gradient(to bottom,rgba(5,5,10,.9),transparent);backdrop-filter:blur(6px)}
+nav a{font-family:'Space Mono',monospace;font-size:.64rem;color:var(--muted);text-decoration:none;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;cursor:none}
+nav a:hover{color:var(--acc)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 60px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,255,0,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,0,.022) 1px,transparent 1px);background-size:72px 72px;animation:gridY 28s linear infinite}
+@keyframes gridY{to{transform:translateY(72px)}}
+.orb{position:absolute;border-radius:50%}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(200,255,0,.07) 0%,transparent 70%);top:40%;left:62%;transform:translate(-50%,-50%);animation:p1 6s ease-in-out infinite}
+.orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,.05) 0%,transparent 70%);top:20%;left:80%;animation:p2 8s ease-in-out infinite}
+@keyframes p1{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+@keyframes p2{0%,100%{opacity:.3}50%{opacity:.7}}
+
+.hero-badge{display:inline-flex;align-items:center;gap:9px;background:rgba(200,255,0,.07);border:1px solid rgba(200,255,0,.22);padding:6px 18px;border-radius:100px;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--acc);letter-spacing:.1em;margin-bottom:24px;width:fit-content;opacity:1;visibility:visible}
+.hero-badge::before{content:'';width:6px;height:6px;min-width:6px;border-radius:50%;background:var(--acc);display:inline-block;animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.hero-name{font-family:'Bebas Neue',sans-serif;line-height:.88;letter-spacing:-.01em;position:relative;z-index:1}
+.hero-name .line1{font-size:clamp(3.5rem,10vw,10rem);display:block}
+.hero-name .line2{font-size:clamp(3.5rem,10vw,10rem);display:block;color:var(--acc)}
+
+.hero-roles{margin-top:20px;position:relative;z-index:1;height:28px;overflow:hidden}
+.role-track{display:flex;flex-direction:column;animation:roleScroll 6s steps(3,end) infinite}
+.role-item{font-family:'Bebas Neue',sans-serif;font-size:clamp(.9rem,2vw,1.45rem);letter-spacing:.18em;height:28px;display:flex;align-items:center;white-space:nowrap}
+.role-item:nth-child(1){color:var(--acc)}
+.role-item:nth-child(2){color:var(--acc3)}
+.role-item:nth-child(3){color:var(--acc2)}
+@keyframes roleScroll{0%{transform:translateY(0)}33.33%{transform:translateY(-28px)}66.66%{transform:translateY(-56px)}100%{transform:translateY(0)}}
+
+.hero-sub{margin-top:14px;font-size:.92rem;color:var(--muted);max-width:440px;line-height:1.8;position:relative;z-index:1}
+.hero-cta{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+.btn{padding:12px 28px;font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:none;display:inline-block;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.btn-p{background:var(--acc);color:#000;clip-path:polygon(0 0,calc(100% - 11px) 0,100% 11px,100% 100%,11px 100%,0 calc(100% - 11px))}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(200,255,0,.28)}
+.btn-s{background:transparent;color:var(--txt);border:1px solid var(--border)}
+.btn-s:hover{border-color:var(--acc);color:var(--acc)}
+
+.hero-scroll{position:absolute;bottom:32px;right:40px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hero-scroll span{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.16em;writing-mode:vertical-rl}
+.sline{width:1px;height:48px;background:linear-gradient(to bottom,var(--muted),transparent);animation:sln 1.7s ease-in-out infinite}
+@keyframes sln{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* MARQUEE */
+.mq-wrap{padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;background:var(--surf)}
+.mq-track{display:flex;gap:44px;animation:mq 20s linear infinite;width:max-content}
+.mq-item{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.14em;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:44px}
+.mq-item::after{content:'✦';color:var(--acc);font-size:.7rem}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SHARED */
+section{padding:80px 40px}
+.inner{max-width:1100px;margin:0 auto}
+.sec-label{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--acc);letter-spacing:.22em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:24px;height:1px;background:var(--acc)}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,4.4rem);line-height:1;letter-spacing:.02em;margin-bottom:40px}
+.sec-title span{color:var(--acc)}
+
+/* ABOUT */
+.about{background:var(--surf)}
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:start}
+.about-text p{color:#999;line-height:1.9;font-size:.95rem;margin-bottom:14px}
+.about-text p strong{color:rgba(200,255,0,.85);font-weight:500}
+.service-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+.sp{padding:7px 15px;border:1px solid rgba(200,255,0,.22);color:var(--acc);font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.07em;border-radius:100px;background:rgba(200,255,0,.05)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.stat{background:var(--bg);padding:26px;position:relative;overflow:hidden;transition:background .3s}
+.stat:hover{background:var(--surf2)}
+.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--acc);opacity:0;transition:opacity .3s}
+.stat:hover::before{opacity:1}
+.sn{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--acc);line-height:1}
+.sl{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.09em;margin-top:5px}
+
+/* EXPERIENCE */
+.exp-list{display:flex;flex-direction:column;gap:2px}
+.exp-card{background:var(--surf);border:1px solid var(--border);padding:30px 36px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.exp-card:hover{border-color:rgba(200,255,0,.25);transform:translateX(4px)}
+.exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);opacity:0;transition:opacity .3s}
+.exp-card:hover::before{opacity:1}
+.exp-role{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.05em;margin-bottom:5px}
+.exp-company{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--acc);letter-spacing:.1em;margin-bottom:10px}
+.exp-desc{color:var(--muted);font-size:.82rem;line-height:1.75;padding-left:16px}
+.exp-desc li{margin-bottom:5px}
+.exp-period{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.08em;white-space:nowrap;margin-top:4px}
+.exp-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:.53rem;padding:2px 9px;border-radius:100px;letter-spacing:.07em;margin-bottom:7px}
+.badge-intern{background:rgba(200,255,0,.08);color:var(--acc);border:1px solid rgba(200,255,0,.2)}
+.badge-freelance{background:rgba(0,212,255,.08);color:var(--acc3);border:1px solid rgba(0,212,255,.2)}
+
+/* SKILLS */
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px}
+.sk{background:var(--surf);padding:32px;border:1px solid var(--border);position:relative;overflow:hidden;transition:transform .3s}
+.sk:hover{transform:translateY(-4px)}
+.sk::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc3));transform:scaleX(0);transition:transform .35s;transform-origin:left}
+.sk:hover::after{transform:scaleX(1)}
+.sk.feat{border-top:2px solid rgba(200,255,0,.35)}
+.sk-icon{font-size:1.8rem;margin-bottom:14px}
+.sk-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;margin-bottom:8px}
+.sk-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:.53rem;padding:2px 7px;background:rgba(200,255,0,.1);color:var(--acc);border-radius:2px;letter-spacing:.07em;margin-bottom:8px}
+.sk-desc{color:var(--muted);font-size:.8rem;line-height:1.72;margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:'Space Mono',monospace;font-size:.55rem;padding:3px 8px;border:1px solid var(--border);color:var(--muted);border-radius:2px;transition:border-color .2s,color .2s}
+.sk:hover .tag{border-color:rgba(200,255,0,.28);color:rgba(200,255,0,.8)}
+.tools-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:36px}
+.pill{padding:7px 15px;border:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);border-radius:100px;letter-spacing:.07em;transition:all .2s;cursor:none}
+.pill:hover,.pill.hi{border-color:rgba(200,255,0,.4);color:var(--acc);background:rgba(200,255,0,.04)}
+
+/* PROJECTS */
+.projects{background:var(--surf)}
+.proj-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.pc{background:var(--bg);padding:30px;position:relative;overflow:hidden;cursor:none;transition:transform .3s}
+.pc:hover{transform:translateY(-4px)}
+.pc.lg{grid-column:span 7}.pc.md{grid-column:span 5}.pc.full{grid-column:span 12}
+.pc-num{font-family:'Space Mono',monospace;font-size:.54rem;color:var(--muted);letter-spacing:.15em;margin-bottom:14px}
+.pc-prev{width:100%;aspect-ratio:16/9;margin-bottom:16px;border-radius:3px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pc-prev-lbl{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;opacity:.11;letter-spacing:.1em}
+.c1 .pc-prev{background:linear-gradient(135deg,#081a0e,#0e3820)}
+.c2 .pc-prev{background:linear-gradient(135deg,#130c2a,#2a1258)}
+.c3 .pc-prev{background:linear-gradient(135deg,#0a1520,#0a2854)}
+.c4 .pc-prev{background:linear-gradient(135deg,#18092a,#380e5c)}
+.c5 .pc-prev{background:linear-gradient(135deg,#181208,#3a2a08)}
+.c6 .pc-prev{background:linear-gradient(135deg,#0a180a,#12381a)}
+.c7 .pc-prev{background:linear-gradient(135deg,#1a0808,#44100e)}
+.pc-title{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.05em;margin-bottom:7px}
+.pc-desc{color:var(--muted);font-size:.79rem;line-height:1.72;margin-bottom:14px}
+.pc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pc-type{font-family:'Space Mono',monospace;font-size:.54rem;padding:3px 9px;background:rgba(200,255,0,.08);color:var(--acc);border-radius:2px;letter-spacing:.07em}
+.pc-link{margin-left:auto;font-family:'Space Mono',monospace;font-size:.55rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;transition:color .2s;display:flex;align-items:center;gap:4px;cursor:none;flex-shrink:0}
+.pc-link:hover{color:var(--acc)}
+.arr{display:inline-block;transition:transform .2s}
+.pc-link:hover .arr{transform:translate(3px,-3px)}
+
+/* CERTS */
+.cert-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px}
+.cert{background:var(--surf);padding:24px 28px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;transition:border-color .3s}
+.cert:hover{border-color:rgba(200,255,0,.25)}
+.cert-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.cert-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;margin-bottom:3px}
+.cert-org{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--acc);letter-spacing:.08em}
+.cert-yr{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:3px}
+
+/* CONTACT */
+.contact{text-align:center;position:relative;overflow:hidden;padding:80px 40px}
+.contact-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(200,255,0,.055) 0%,transparent 60%)}
+.contact-inner{position:relative;z-index:1;max-width:640px;margin:0 auto}
+.contact-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,8rem);line-height:.88;margin-bottom:22px}
+.contact-title .ca{color:var(--acc)}
+.contact-sub{color:var(--muted);font-size:.9rem;line-height:1.8;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto}
+.contact-cta-wrap{display:flex;justify-content:center}
+
+/* FOOTER */
+footer{padding:22px 40px;border-top:1px solid var(--border);display:flex;justify-content:center;align-items:center;background:var(--bg)}
+footer p{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--muted);letter-spacing:.07em}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.rev.on{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:16px 20px;gap:20px}
+  .hero{padding:90px 20px 50px}
+  section{padding:60px 20px}
+  .contact{padding:60px 20px}
+  .about-grid{grid-template-columns:1fr;gap:36px}
+  .pc.lg,.pc.md,.pc.full{grid-column:span 12}
+  .exp-card{grid-template-columns:1fr;padding:22px}
+  .exp-period{margin-top:10px}
+  footer{padding:20px}
+}
+@media(max-width:500px){
+  nav{gap:14px}
+  nav a{font-size:.56rem}
+  .hero-cta{flex-direction:column}
+  .btn{text-align:center}
+  .stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#skills">Skills</a>
+  <a href="#projects">Projects</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-badge"><span>Open to Work</span></div>
+  <h1 class="hero-name">
+    <span class="line1">FULL STACK</span>
+    <span class="line2">DEVELOPER</span>
+  </h1>
+  <div class="hero-roles">
+    <div class="role-track">
+      <div class="role-item">FULL STACK DEVELOPER</div>
+      <div class="role-item">FIGMA · WEB DESIGNER</div>
+      <div class="role-item">FREELANCER · ML ENGINEER</div>
+    </div>
+  </div>
+  <p class="hero-sub">I design and build across every platform — web, mobile, desktop, and data. Clean code. Sharp design. Delivered.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-p">View My Work</a>
+    <a href="#contact" class="btn btn-s">Let's Talk</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="sline"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-item">Full Stack Dev</span><span class="mq-item">Figma Design</span>
+    <span class="mq-item">FastAPI</span><span class="mq-item">MERN Stack</span>
+    <span class="mq-item">Machine Learning</span><span class="mq-item">UI/UX Design</span>
+    <span class="mq-item">Python</span><span class="mq-item">React.js</span>
+    <span class="mq-item">Mobile Apps</span><span class="mq-item">Desktop Apps</span>
+    <span class="mq-item">Freelancer</span><span class="mq-item">C# · .NET</span>
+    <span class="mq-item">Full Stack Dev</span><span class="mq-item">Figma Design</span>
+    <span class="mq-item">FastAPI</span><span class="mq-item">MERN Stack</span>
+    <span class="mq-item">Machine Learning</span><span class="mq-item">UI/UX Design</span>
+    <span class="mq-item">Python</span><span class="mq-item">React.js</span>
+    <span class="mq-item">Mobile Apps</span><span class="mq-item">Desktop Apps</span>
+    <span class="mq-item">Freelancer</span><span class="mq-item">C# · .NET</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="inner">
+    <div class="about-grid">
+      <div class="about-text rev">
+        <div class="sec-label">Who I Am</div>
+        <h2 class="sec-title">I Build.<br><span>I Design.</span><br>I Deliver.</h2>
+        <p>A full-stack developer, UI/UX designer, and freelancer based in Lahore. I work across the entire product lifecycle — from <strong>Figma wireframes</strong> to deployed, production-ready applications.</p>
+        <p>Whether it's a sleek landing page, a cross-platform mobile app, a powerful backend API, or an ML-powered tool — I scope it, design it, build it, and ship it. My stack spans <strong>React, Node.js, FastAPI, Python, Flutter, and C#</strong>.</p>
+        <p>Currently a CS student at <strong>UET Lahore</strong> (CGPA 3.3/4.0) and actively taking on freelance projects.</p>
+        <div class="service-pills">
+          <span class="sp">Web Development</span>
+          <span class="sp">UI/UX Design</span>
+          <span class="sp">Mobile Apps</span>
+          <span class="sp">Backend APIs</span>
+          <span class="sp">ML Solutions</span>
+          <span class="sp">Desktop Apps</span>
+        </div>
+      </div>
+      <div class="stats rev">
+        <div class="stat"><div class="sn">All</div><div class="sl">Platforms — Web, Mobile, Desktop</div></div>
+        <div class="stat"><div class="sn">15+</div><div class="sl">Projects Shipped</div></div>
+        <div class="stat"><div class="sn">3.27</div><div class="sl">CGPA / 4.0 — UET Lahore</div></div>
+        <div class="stat"><div class="sn">∞</div><div class="sl">Open to Freelance Work</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="inner">
+    <div class="sec-label">Work History</div>
+    <h2 class="sec-title">Experience & <span>Roles</span></h2>
+    <div class="exp-list">
+      <div class="exp-card rev">
+        <div>
+          <span class="exp-badge badge-intern">Internship</span>
+          <div class="exp-role">Full Stack Developer</div>
+          <div class="exp-company">HiSkyTech · Internship</div>
+          <ul class="exp-desc">
+            <li>Developed a robust private SaaS freelancing platform with advanced project posting and bidding features.</li>
+            <li>Built dynamic, role-based user dashboards for admins and freelancers using React.js and Node.js.</li>
+            <li>Implemented secure user authentication, task assignment workflows, and real-time bid tracking.</li>
+            <li>Managed scalable backend architecture and seamless data flow with Express.js and MongoDB.</li>
+          </ul>
+        </div>
+        <div class="exp-period">May 2025 – Aug 2025</div>
+      </div>
+      <div class="exp-card rev">
+        <div>
+          <span class="exp-badge badge-intern">Internship</span>
+          <div class="exp-role">UI/UX Design Intern</div>
+          <div class="exp-company">PixelCraft Studio · Remote</div>
+          <ul class="exp-desc">
+            <li>Designed end-to-end user flows and high-fidelity prototypes in Figma for 3 client products across e-commerce and SaaS verticals.</li>
+            <li>Built and maintained a shared component library and design system used across the team.</li>
+            <li>Collaborated directly with developers to ensure pixel-perfect implementation of designs.</li>
+            <li>Conducted usability reviews and iterated on UI based on feedback cycles.</li>
+          </ul>
+        </div>
+        <div class="exp-period">Jun 2024 – Sep 2024</div>
+      </div>
+      <div class="exp-card rev">
+        <div>
+          <span class="exp-badge badge-freelance">Freelance</span>
+          <div class="exp-role">Freelance Web Designer & Developer</div>
+          <div class="exp-company">Self-Employed · Remote</div>
+          <ul class="exp-desc">
+            <li>Delivered custom websites and landing pages for small businesses — from Figma mockup to live deployment.</li>
+            <li>Built full-stack web applications using the MERN stack with responsive, mobile-first design.</li>
+            <li>Managed client communication, scope definition, revisions, and final handoff independently.</li>
+          </ul>
+        </div>
+        <div class="exp-period">2023 – Present</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="inner">
+    <div class="sec-label">What I Bring</div>
+    <h2 class="sec-title">Skills & <span>Services</span></h2>
+    <div class="sk-grid">
+      <div class="sk feat rev">
+        <div class="sk-icon">🎨</div>
+        <div class="sk-title">UI/UX & Figma Design</div>
+        <div class="sk-badge">Featured Service</div>
+        <div class="sk-desc">Designing clean, intuitive interfaces — from user flows and wireframes to polished high-fidelity prototypes ready for dev handoff.</div>
+        <div class="tags"><span class="tag">Figma</span><span class="tag">Wireframing</span><span class="tag">Prototyping</span><span class="tag">Design Systems</span></div>
+      </div>
+      <div class="sk feat rev">
+        <div class="sk-icon">🌐</div>
+        <div class="sk-title">Web Design & Development</div>
+        <div class="sk-badge">Featured Service</div>
+        <div class="sk-desc">End-to-end web solutions — pixel-perfect frontend design to robust backend architecture. Fast, responsive, built to scale.</div>
+        <div class="tags"><span class="tag">React.js</span><span class="tag">Next.js</span><span class="tag">HTML/CSS</span><span class="tag">Node.js</span></div>
+      </div>
+      <div class="sk rev">
+        <div class="sk-icon">⚙️</div>
+        <div class="sk-title">Backend & APIs</div>
+        <div class="sk-desc">Scalable REST APIs, authentication systems, async programming, and database-heavy backend services.</div>
+        <div class="tags"><span class="tag">FastAPI</span><span class="tag">Node.js</span><span class="tag">JWT/OAuth</span><span class="tag">SQLAlchemy</span></div>
+      </div>
+      <div class="sk rev">
+        <div class="sk-icon">🤖</div>
+        <div class="sk-title">Machine Learning</div>
+        <div class="sk-desc">End-to-end ML pipelines — data preprocessing, model training, evaluation, and real-time inference integration.</div>
+        <div class="tags"><span class="tag">TensorFlow</span><span class="tag">Scikit-learn</span><span class="tag">LSTM/GRU</span><span class="tag">Pandas</span></div>
+      </div>
+      <div class="sk rev">
+        <div class="sk-icon">📱</div>
+        <div class="sk-title">Mobile Apps</div>
+        <div class="sk-desc">Cross-platform mobile applications that feel native on both iOS and Android.</div>
+        <div class="tags"><span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">iOS</span><span class="tag">Android</span></div>
+      </div>
+      <div class="sk rev">
+        <div class="sk-icon">🖥️</div>
+        <div class="sk-title">Desktop & .NET</div>
+        <div class="sk-desc">Windows desktop applications with MVC architecture, role-based access, and clean admin panels.</div>
+        <div class="tags"><span class="tag">C#</span><span class="tag">ASP.NET MVC</span><span class="tag">Windows Forms</span><span class="tag">SQL Server</span></div>
+      </div>
+    </div>
+    <div class="tools-row">
+      <span class="pill hi">Python</span><span class="pill hi">FastAPI</span><span class="pill hi">React.js</span>
+      <span class="pill hi">Node.js</span><span class="pill hi">Figma</span><span class="pill hi">TensorFlow</span>
+      <span class="pill hi">MongoDB</span><span class="pill hi">PostgreSQL</span><span class="pill hi">C#</span>
+      <span class="pill">Flutter</span><span class="pill">Docker</span><span class="pill">Streamlit</span>
+      <span class="pill">Pandas</span><span class="pill">Scikit-learn</span><span class="pill">SQLAlchemy</span>
+      <span class="pill">JWT Auth</span><span class="pill">Git</span><span class="pill">Postman</span>
+      <span class="pill">Bootstrap</span><span class="pill">Next.js</span><span class="pill">Redis</span>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="inner">
+    <div class="sec-label">Real Work · GitHub Projects</div>
+    <h2 class="sec-title">Featured <span>Projects</span></h2>
+    <div class="proj-grid">
+      <div class="pc lg c1 rev">
+        <div class="pc-num">01 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">MERN SAAS</div></div>
+        <div class="pc-title">Freelance SaaS Platform</div>
+        <div class="pc-desc">Full MERN stack platform for project posting, bidding, and task management. Role-based dashboards, JWT auth, and a clean contractor–client workflow.</div>
+        <div class="pc-meta">
+          <span class="pc-type">Web App</span>
+          <span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">JWT</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/MERN-Stack-freelancing-saas-platform" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc md c2 rev">
+        <div class="pc-num">02 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">STOCK ML</div></div>
+        <div class="pc-title">Stock Price Predictor</div>
+        <div class="pc-desc">Compared Linear Regression, RNN, LSTM & GRU for time-series forecasting. Best: GRU — MAE 5.22%, RMSE 6.98%.</div>
+        <div class="pc-meta">
+          <span class="pc-type">ML · Python</span>
+          <span class="tag">TensorFlow</span><span class="tag">LSTM</span><span class="tag">GRU</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/Stock-Price-Predictor" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc md c3 rev">
+        <div class="pc-num">03 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">VOICE ML</div></div>
+        <div class="pc-title">Voice Classification System</div>
+        <div class="pc-desc">Real-time audio pipeline classifying human/animal vs. other sounds via DNN. Integrated with simulated gate control — >90% accuracy.</div>
+        <div class="pc-meta">
+          <span class="pc-type">ML · Audio</span>
+          <span class="tag">Librosa</span><span class="tag">TensorFlow</span><span class="tag">SoundDevice</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/Voice-Classification-System" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc lg c4 rev">
+        <div class="pc-num">04 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">FASTAPI</div></div>
+        <div class="pc-title">Book Catalog API</div>
+        <div class="pc-desc">Production-ready RESTful API with JWT auth, role-based access control, SQLAlchemy ORM, full Pytest test suite, and auto-generated OpenAPI docs.</div>
+        <div class="pc-meta">
+          <span class="pc-type">Backend API</span>
+          <span class="tag">FastAPI</span><span class="tag">SQLAlchemy</span><span class="tag">Pytest</span><span class="tag">JWT</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/fastapi-book-catalog" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc md c5 rev">
+        <div class="pc-num">05 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">DB BENCH</div></div>
+        <div class="pc-title">QueryCrunch</div>
+        <div class="pc-desc">Visual benchmarking of CRUD + indexing across PostgreSQL, MySQL, MongoDB & SQL Server via a Streamlit dashboard.</div>
+        <div class="pc-meta">
+          <span class="pc-type">Data Tool</span>
+          <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Redis</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/Advanced-DB-Python---Query-Benchmarking-Tool" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc md c6 rev">
+        <div class="pc-num">06 / 07</div>
+        <div class="pc-prev"><div class="pc-prev-lbl">CAR ML</div></div>
+        <div class="pc-title">Carculator</div>
+        <div class="pc-desc">Interactive Streamlit app using regression models to predict car prices with real-time insights and a clean UI.</div>
+        <div class="pc-meta">
+          <span class="pc-type">ML App</span>
+          <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">Streamlit</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/AI-Python---Car-Price-Predictor" target="_blank">GitHub <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="pc full c7 rev">
+        <div class="pc-num">07 / 07</div>
+        <div class="pc-prev" style="aspect-ratio:21/5"><div class="pc-prev-lbl">DESKTOP · C#</div></div>
+        <div class="pc-title">Bloomify — Floral E-Commerce Desktop App</div>
+        <div class="pc-desc">Full inventory, user, and order management for a flower shop. Role-based admin panel, data validation, and a polished Windows Forms UI in C#.</div>
+        <div class="pc-meta">
+          <span class="pc-type">Desktop App</span>
+          <span class="tag">C#</span><span class="tag">Windows Forms</span><span class="tag">SQL Server</span>
+          <a class="pc-link" href="https://github.com/Samar-Riaz/Report" target="_blank">Report <span class="arr">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="inner">
+    <div class="sec-label">Credentials</div>
+    <h2 class="sec-title">Education & <span>Certifications</span></h2>
+    <div class="cert-row">
+      <div class="cert rev">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name">B.S. Computer Science</div>
+          <div class="cert-org">UET Lahore</div>
+          <div class="cert-yr">2023 – 2027 · CGPA 3.3 / 4.0</div>
+        </div>
+      </div>
+      <div class="cert rev">
+        <div class="cert-icon">📜</div>
+        <div>
+          <div class="cert-name">FastAPI for Backend Development</div>
+          <div class="cert-org">freeCodeCamp</div>
+          <div class="cert-yr">2025</div>
+        </div>
+      </div>
+      <div class="cert rev">
+        <div class="cert-icon">📜</div>
+        <div>
+          <div class="cert-name">Python for Web Development</div>
+          <div class="cert-org">Udemy</div>
+          <div class="cert-yr">2024</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-bg"></div>
+  <div class="contact-inner rev">
+    <div class="sec-label" style="justify-content:center">Hire Me · Collaborate · Connect</div>
+    <h2 class="contact-title">LET'S<br><span class="ca">BUILD IT.</span></h2>
+    <p class="contact-sub">Need a full-stack web app, a Figma design, a slick landing page, or an ML solution? Available for freelance projects and internships.</p>
+    <div class="contact-cta-wrap">
+      <a href="#" class="btn btn-p">Start a Project</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© Full Stack Developer · Lahore, Pakistan</p>
+</footer>
+
+<script>
+  const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button,.sk,.pc,.pill,.stat,.cert,.exp-card').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+  });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(() => e.target.classList.add('on'), i*50); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.rev').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
